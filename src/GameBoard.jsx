@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
-import "./App.css";
+import React, { useState, useEffect } from 'react';
+import './index.css';
+import App from './App';
+import Modal from './Modal'; 
 
 const GameBoard = ({ level, onLevelComplete, isActive }) => {
-  const [sequence, setSequence] = useState([]);
-  const [userSequence, setUserSequence] = useState([]);
-  const [isUserTurn, setIsUserTurn] = useState(false);
+  const [sequence, setSequence] = useState([]);// Initialize sequence to an empty array
+  const [userSequence, setUserSequence] = useState([]);// Initialize userSequence to an empty array
+  const [isUserTurn, setIsUserTurn] = useState(false);//  Initialize isUserTurn to false
+  const [isGameOver, setIsGameOver] = useState(false);  // Initialize isGameOver to false
 
   useEffect(() => {
     if (isActive) startNewLevel();
@@ -38,9 +41,9 @@ const GameBoard = ({ level, onLevelComplete, isActive }) => {
 
   const highlightSquare = (squareIndex) => {
     const square = document.getElementById(`square-${squareIndex}`);
-    square.classList.add("highlight");
+    square.classList.add('highlight');
     setTimeout(() => {
-      square.classList.remove("highlight");
+      square.classList.remove('highlight');
     }, 500);
   };
 
@@ -54,13 +57,23 @@ const GameBoard = ({ level, onLevelComplete, isActive }) => {
         setTimeout(onLevelComplete, 1000);
       }
     } else {
-      alert("Game Over! Try Again.");
+      setIsGameOver(true); // Trigger game over
     }
   };
 
+  const handleRestart = () => {
+    setIsGameOver(false);
+    setIsUserTurn(false);
+    setSequence([]);
+    onLevelComplete(); // Reset the game to start from level 1
+  };
+
   return (
-    isActive && (
-      <div className="game-board">
+    <>
+      {isGameOver && (
+        <Modal message="Game Over! Try Again." onClose={handleRestart} />
+      )}
+      <div className={`game-board ${isGameOver ? 'faded' : ''}`}>
         <h2>Level: {level}</h2>
         <div className="grid">
           {Array.from({ length: 9 }).map((_, index) => (
@@ -73,7 +86,7 @@ const GameBoard = ({ level, onLevelComplete, isActive }) => {
           ))}
         </div>
       </div>
-    )
+    </>
   );
 };
 

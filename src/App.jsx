@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import GameBoard from "./GameBoard";
-import StartButton from "./StartButton";
-import "./index.css";
+import React, { useState } from 'react';
+import GameBoard from './GameBoard';
+import StartButton from './StartButton';
+import './index.css';
 
 function App() {
   const [level, setLevel] = useState(1);
@@ -9,16 +9,21 @@ function App() {
 
   const handleStartGame = () => {
     setIsGameActive(true);
-    setLevel(1);
+    setLevel(1); // Reset level to 1 when starting a new game
   };
 
   const handleLevelComplete = () => {
     if (level < 10) {
       setLevel(level + 1);
     } else {
-      alert("Congratulations! You completed all levels!");
-      setIsGameActive(false);
+      alert('Congratulations! You completed all levels!');
+      setIsGameActive(false); // End the game after level 10
     }
+  };
+
+  const handleGameOver = () => {
+    setIsGameActive(false);
+    setLevel(1);
   };
 
   return (
@@ -28,6 +33,7 @@ function App() {
         level={level}
         onLevelComplete={handleLevelComplete}
         isActive={isGameActive}
+        onGameOver={handleGameOver} // Handle game reset
       />
     </div>
   );
